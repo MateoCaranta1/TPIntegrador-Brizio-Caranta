@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from contrasenia import generar_contrasenia
 
 class Usuario(ABC):
     def __init__(self, nombre, apellido, email, contrasenia):
@@ -28,6 +29,28 @@ class Estudiante(Usuario):
         self.cursos.append(curso)
         print(f"Estudiante {self.nombre} matriculado en el curso {curso.nombre}")
 
+class Profesor(Usuario):
+    def __init__(self, nombre, apellido, email, contrasenia, titulo, anio_egreso):
+        super().__init__(nombre, apellido, email, contrasenia)
+        self.titulo = titulo
+        self.anio_egreso = anio_egreso
+        self.cursos = []
+
+    def __str__(self):
+        return super().str() + f" \n- Título: {self.titulo}"
+
+    def dictar_curso(self, curso):
+        self.cursos.append(curso)
+        print(f"Profesor {self.nombre} dictando el curso {curso.nombre}")
+
+class Curso: 
+    def init(self, nombre):
+        self.nombre = nombre
+        self.contrasenia_matriculacion = generar_contrasenia()
+
+    def str(self):
+        return f"Curso: {self.nombre}"
+    
 
 def menu_principal (self):
     print ("---Menu---")
@@ -41,10 +64,12 @@ def menu_principal (self):
 def programa_principal ():
     opcion = 0 
     while opcion != 4:
-        opcion = menu_principal()
-
+        opcion == menu_principal()
         if opcion == 1:
-            print("")
+            email = input("Ingrese su email:\n")
+            contrasenia = input("Ingrese su contrasenia:\n")
+            alumno = Estudiante(email, contrasenia)
+            Estudiante.cursos(alumno)
         elif opcion == 2:
             print("")
         elif opcion == 3:
@@ -54,5 +79,6 @@ def programa_principal ():
             break
         else:
             print("Ingrese una opcion correcta! (1-4)")
+
         
         
