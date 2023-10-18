@@ -6,7 +6,7 @@ lista_profesores = []
 lista_curso = ["Laboratorio I", "Ingles I", "Programacion I", "Ingles II","Laboratorio II", "Programacion II"]
 
 class Usuario(ABC):
-    def __init__(self, nombre, apellido, email, contrasenia):
+    def _init_(self, nombre, apellido, email, contrasenia):
         self.nombre = nombre
         self.apellido = apellido
         self.email = email
@@ -20,13 +20,13 @@ class Usuario(ABC):
         pass
 
 class Estudiante(Usuario): 
-    def __init__(self, nombre, apellido, email, contrasenia, legajo, anio_inscripcion_carrera):
-        super().__init__(nombre, apellido, email, contrasenia)
+    def _init_(self, nombre, apellido, email, contrasenia, legajo, anio_inscripcion_carrera):
+        super()._init_(nombre, apellido, email, contrasenia)
         self.legajo = legajo 
         self.anio_inscripcion_carrera = anio_inscripcion_carrera
         self.cursos = []
         
-    def __str__(self):
+    def _str_(self):
         return super().str() + f" \n- Legajo: {self.legajo}"
     
     def matriculacion_en_curso (self, curso):
@@ -42,8 +42,8 @@ class Estudiante(Usuario):
 
 
 class Profesor(Usuario):
-    def __init__(self, nombre, apellido, email, contrasenia, titulo, anio_egreso):
-        super().__init__(nombre, apellido, email, contrasenia)
+    def _init_(self, nombre, apellido, email, contrasenia, titulo, anio_egreso):
+        super()._init_(nombre, apellido, email, contrasenia)
         self.titulo = titulo
         self.anio_egreso = anio_egreso
         self.cursos = []
@@ -64,7 +64,7 @@ class Profesor(Usuario):
 
 
 class Curso: 
-    def __init__(self, nombre):
+    def _init_(self, nombre):
         self.nombre = nombre
         self.contrasenia_matriculacion = generar_contrasenia()
 
@@ -151,4 +151,3 @@ profesor = Profesor("Mateo", "Caranta", "mateo@gmail.com", "123", "Licenciado", 
 lista_profesores.append(profesor)
 
 programa_principal()
-
