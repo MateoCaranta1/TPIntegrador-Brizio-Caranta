@@ -3,6 +3,7 @@ from contrasenia import generar_contrasenia
 
 lista_alumnos = []  
 lista_profesores = []
+lista_curso = ["Laboratorio I", "Ingles I", "Programacion I", "Ingles II","Laboratorio II", "Programacion II"]
 
 class Usuario(ABC):
     def __init__(self, nombre, apellido, email, contrasenia):
@@ -72,6 +73,13 @@ class Curso:
         return f"Curso: {self.nombre}"
 
 
+def submenu_alumno():
+    print ("1- Matricularse a un curso")
+    print ("2- Ver curso.")
+    print ("3- Volver al menu principal.")
+    opcion_alumno = int(input("Seleccione una opcion: "))
+    return opcion_alumno
+
 def menu_principal ():
     print ("\n---Menu---")
     print ("1- Ingresar como alumno.")
@@ -79,7 +87,7 @@ def menu_principal ():
     print ("3- Ver cursos.")
     print ("4- Salir.")  
     print ("")
-    opcion = int(input("Seleccione una opcion:\n"))
+    opcion = int(input("Seleccione una opcion: "))
     return opcion
 
 def programa_principal():
@@ -98,8 +106,16 @@ def programa_principal():
                     break
             if alumno_encontrado:
                 print(f"Bienvenido, {alumno_encontrado.nombre}")
+                opcion_alumno = submenu_alumno()
+                if opcion_alumno == 1:
+                    print("")
+                if opcion_alumno == 2:
+                    print()
+                if opcion_alumno == 3: 
+                    programa_principal()
             else:
                 print("Credenciales incorrectas o estudiante inexistente, debe darse de alta en alumnado.")
+
         
         elif opcion == 2:
             validacion_email_profe = input("Ingrese su email:\n")
@@ -114,8 +130,13 @@ def programa_principal():
                 print(f"Bienvenido, {profe_encontrado.nombre}")
             else:
                 print("Credenciales incorrectas o profe inexistente, debe darse de alta en alumnado.")
+
+
         elif opcion == 3:
-            print("Mostrar cursos aquí.")
+            for i in sorted(lista_curso):
+                print("Materia: ", i, "- Carrera: Tecnicatura Universitaria en Programacion")
+
+
         elif opcion == 4:
             print("Hasta luego!!")
             break
