@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from contrasenia import generar_contrasenia
 
-#- DECLARACION DE VARIABLES GLOBALES
+cont = 1
 lista_alumnos = []  
 lista_profesores = []
 mis_cursos = {}
@@ -9,13 +9,13 @@ mis_cursos = {}
 #----INICIO DECLARACION DE CLASES ------------------------------------
 class Usuario(ABC):
     def __init__(self, nombre, apellido, email, contrasenia):
-        self.nombre = nombre
-        self.apellido = apellido
-        self.email = email
-        self.contrasenia = contrasenia
+        self._nombre = nombre
+        self._apellido = apellido
+        self._email = email
+        self._contrasenia = contrasenia
 
     def __str__(self):
-        return f"Nombre: {self.nombre} Apellido: {self.apellido}\n- Email: {self.email}"
+        return f"Nombre: {self._nombre} Apellido: {self._apellido}\n- Email: {self._email}"
 
     @abstractmethod
     def validar_credenciales(self, email, contrasenia):
@@ -24,20 +24,20 @@ class Usuario(ABC):
 class Estudiante(Usuario): 
     def __init__(self, nombre, apellido, email, contrasenia, legajo, anio_inscripcion_carrera):
         super().__init__(nombre, apellido, email, contrasenia)
-        self.legajo = legajo 
-        self.anio_inscripcion_carrera = anio_inscripcion_carrera
+        self._legajo = legajo 
+        self._anio_inscripcion_carrera = anio_inscripcion_carrera
         self.cursos = []
         
     def __str__(self):
-        return super().__str__() + f" \n- Legajo: {self.legajo}"
+        return super().__str__() + f" \n- Legajo: {self._legajo}"
     
     def matriculacion_en_curso (self, curso):
         lista_alumnos.append(curso)
-        print(f"Estudiante {self.nombre} matriculado en el curso {curso}")
+        print(f"Estudiante {self.nombre} matriculado en el curso {curso.nombre}")
 
     def validar_credenciales(self, email, contrasenia):
         super().validar_credenciales(email, contrasenia)
-        if email == self.email and contrasenia == self.contrasenia:  
+        if email == self._email and contrasenia == self._contrasenia:  
             return True
         else:
             return False
@@ -46,20 +46,20 @@ class Estudiante(Usuario):
 class Profesor(Usuario):
     def __init__(self, nombre, apellido, email, contrasenia, titulo, anio_egreso):
         super().__init__(nombre, apellido, email, contrasenia)
-        self.titulo = titulo
-        self.anio_egreso = anio_egreso
+        self._titulo = titulo
+        self._anio_egreso = anio_egreso
         self.cursos = []
 
     def __str__(self):
-        return super().__str__() + f" \n- Título: {self.titulo}"
+        return super().__str__() + f" \n- Título: {self._titulo}"
 
     def dictar_curso(self, curso):
         self.cursos.append(curso)
-        print(f"\nProfesor {self.nombre} dictando el curso '{curso.nombre}'")
+        print(f"Profesor {self.nombre} dictando el curso {curso.nombre}")
 
     def validar_credenciales(self, email, contrasenia):
         super().validar_credenciales(email, contrasenia)
-        if email == self.email and contrasenia == self.contrasenia:
+        if email == self._email and contrasenia == self._contrasenia:
             return True
         else:
             return False
@@ -67,14 +67,13 @@ class Profesor(Usuario):
 
 class Curso: 
     def __init__(self, nombre):
-        self.nombre = nombre
-        self.contrasenia_matriculacion = generar_contrasenia()
+        self._nombre = nombre
+        self._contrasenia_matriculacion = generar_contrasenia()
 
     
     def __str__(self):
         return f"Curso: {self.nombre}"
-    
-#----CIERRE DECLARACION DE CLASES ------------------------------------
+
 
 #---INICIO SUBMENU ALUMNOS Y OPCIONES ------------------------------------
 def submenu_alumno():
@@ -88,55 +87,21 @@ def submenu_alumno():
 def opcion1_submenu_alumno(alumno):
     print("Lista de cursos disponibles:")
     if len(mis_cursos) == 0:
-        print("\nNo hay cursos disponibles de momento.")
-        return
-
-    for i, curso in enumerate(mis_cursos.values(), 1):
-        print(f"{i}. {curso.nombre}")
-
-    opcion_curso = int(input("Seleccione el curso al que desea matricularse: "))
-
-    if opcion_curso < 1 or opcion_curso > len(mis_cursos):
-        print("Opcion invalida. Por favor, elija un curso valido.")
-        return
-
-    curso_seleccionado = list(mis_cursos.values())[opcion_curso - 1]
-
-    if curso_seleccionado in alumno.cursos:
-        print(f"Ya esta matriculado en el curso '{curso_seleccionado.nombre}'.")
+        print ("No hay cursos disponibles en este momento.")
     else:
-        for i in sorted(mis_cursos):
-            print (f"{cont}- {i}")
-            cont += 1
+        contrasenia_ingresada = input(f"Ingrese la contraseña de matriculación para '{curso_seleccionado._nombre}': ")
 
-        opcion_curso = input("\nSeleccione un curso por número: ")
-        if opcion_curso.isnumeric():
-            opcion_curso = int(opcion_curso)
-            if opcion_curso >= 1 and opcion_curso <= len(mis_cursos):
-                curso_seleccionado = mis_cursos[opcion_curso - 1]
-                if curso_seleccionado in alumno.cursos:
-                    print("Ya está matriculado en ese curso.")
-                else:
-                    contrasena_matriculacion = input(f"Ingrese la contraseña de matriculación para '{curso_seleccionado}', '{contrasenia_curso}': ")
-                    if contrasena_matriculacion == contrasenia_curso:
-                        alumno.matriculacion_en_curso(curso_seleccionado)
-                    else:
-                        print("La contraseña de matriculación es incorrecta.")
-            else:
-                print("Opción no válida. Ingrese un número de curso válido.")
+        if contrasenia_ingresada == curso_seleccionado._contrasenia_matriculacion:
+            alumno.cursos.append(curso_seleccionado)
+            print(f"Matriculado en el curso '{curso_seleccionado._nombre}'.")
         else:
-            print("Contraseña de matriculación incorrecta. No se pudo matricular en el curso.")
+            print("Debe ingresar un número válido.")
 
-#---CIERRE SUBMENU ALUMNOS Y OPCIONES ----------------------------------------
 
-def opcion2_submenu_alumno(alumno):
-    if not alumno.cursos:
-        print("No esta inscrito en ningun curso.")
-    else:
-        for i, curso in enumerate(alumno.cursos, 1):
-            print(f"{i} - {curso.nombre}")
+def opcion2_submenu_alumno():
+    for i, Curso in enumerate (mis_cursos, 1):
+        print (f"{i} - {Curso}")
 
-#---INICIO SUBMENU PROFESOR Y OPCIONES --------------------
 def submenu_profe():
     print ("\n1- Dictar curso.")
     print ("2- Ver curso.")
@@ -145,18 +110,16 @@ def submenu_profe():
     print("")
     return opcion_profe
 
-def opcion1_submenu_profe(profesor, mis_cursos):
+def opcion1_submenu_profe(profesor):
+    contrasenia_curso = generar_contrasenia()
     nombre_curso = input("Ingrese el nombre del curso: ")
     curso = Curso(nombre_curso)
     profesor.dictar_curso(curso)
-    mis_cursos[nombre_curso] = curso
-    print(f"Nombre: {nombre_curso} \nContraseña: {curso.contrasenia_matriculacion}")
+    print (f"Nombre: {nombre_curso} \nContrasenia: {contrasenia_curso}")
 
 def opcion2_submenu_profe(profesor):
     for i , curso in enumerate (profesor.cursos,1):
-        print(f"{i}- {curso.nombre}.")
-
-#---CIERRE SUBMENU PROFESOR Y OPCIONES --------------------
+        print(f"{i} - {curso.nombre}")
 
 
 #--- FUNCION MENU PRINCIPAL -------------------------
@@ -187,16 +150,16 @@ def programa_principal():
                     break
             if alumno_encontrado:
                 print(f"\nBienvenido, {alumno_encontrado.nombre}")
-                while True:
-                    opcion_alumno = submenu_alumno()
-                    if opcion_alumno == 1:
-                        opcion1_submenu_alumno(alumno_encontrado)
-                    elif opcion_alumno == 2:
-                        opcion2_submenu_alumno(alumno_encontrado)
-                    elif opcion_alumno == 3: 
-                        break
-                    else: 
-                        print("Opcion incorrecta! Ingresela nuevamente.\n")
+                opcion_alumno = submenu_alumno()
+                
+                if opcion_alumno == 1:
+                    opcion1_submenu_alumno(cont,alumno)
+                elif opcion_alumno == 2:
+                    opcion2_submenu_alumno()
+                elif opcion_alumno == 3: 
+                    programa_principal()
+                else: 
+                    print("Opcion incorrecta! Ingresela nuevamente.\n")
             else:
                 print("Credenciales incorrectas o estudiante inexistente, debe darse de alta en alumnado.")
         
@@ -210,17 +173,16 @@ def programa_principal():
                     profe_encontrado = profe
                     break
             if profe_encontrado:
-                print(f"\nBienvenido, {profe_encontrado.nombre}")
-                while True:
-                    opcion_profe = submenu_profe()
-                    if opcion_profe == 1:
-                        opcion1_submenu_profe(profe_encontrado, mis_cursos)
-                    elif opcion_profe == 2:
-                        opcion2_submenu_profe(profe_encontrado)
-                    elif opcion_profe == 3: 
-                        break
-                    else: 
-                        print("Opcion incorrecta! Ingresela nuevamente.\n")
+                print(f"Bienvenido, {profe_encontrado.nombre}")
+                opcion_profe = submenu_profe()
+                if opcion_profe == 1:
+                    opcion1_submenu_profe(profe_encontrado)
+                elif opcion_profe == 2:
+                    opcion2_submenu_profe(profe_encontrado)
+                elif opcion_profe == 3: 
+                    programa_principal()
+                else: 
+                    print("Opcion incorrecta! Ingresela nuevamente.\n")
             else:
                 print("Credenciales incorrectas o profe inexistente, debe darse de alta en alumnado.")
 
@@ -228,6 +190,7 @@ def programa_principal():
             for profe_encontrado in lista_profesores:
                 for curso in sorted(profe_encontrado.cursos):
                     print(f"Materia: {curso.nombre} - Carrera: Tecnicatura Universitaria en Programacion")
+
 
         elif opcion == 4:
             print("Hasta luego!!\n")
