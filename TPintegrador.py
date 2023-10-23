@@ -98,7 +98,7 @@ def opcion1_submenu_alumno (cont, alumno):
                 if curso_seleccionado in alumno.cursos:
                     print("Ya está matriculado en ese curso.")
                 else:
-                    contrasena_matriculacion = input(f"Ingrese la contraseña de matriculación para '{curso_seleccionado}', '{contrasenia_curso}': ")
+                    contrasena_matriculacion = input(f"Ingrese la contraseña de matriculación para '{curso_seleccionado}': ")
                     if contrasena_matriculacion == contrasenia_curso:
                         alumno.matriculacion_en_curso(curso_seleccionado)
                     else:
