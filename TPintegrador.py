@@ -257,7 +257,6 @@ def opcion2_submenu_profe(profesor):
                 nombre_archivo = input("\nIngrese nombre del archivo: ")
                 formato_archivo = input("Ingrese el formato del archivo: ")
                 crear_archivo = Archivo(nombre_archivo, date.today(), formato_archivo, curso_revisado)
-                #curso_revisado.archivos.append(nuevo_archivo) 
                 curso_revisado.nuevo_archivo(crear_archivo)
             elif archivos_agregados == "2":
                 return None
